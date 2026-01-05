@@ -60,6 +60,7 @@ desktopPackageName = "Chirp"
 desktopPackageVersion = "1.0.0"
 runner = "1.7.0"
 junit = "1.3.0"
+roomGradlePlugin = "2.8.4"
 
 [libraries]
 # Kotlin
@@ -163,6 +164,7 @@ jetbrains-savedstate = { module = "org.jetbrains.androidx.savedstate:savedstate"
 jetbrains-bundle = { module = "org.jetbrains.androidx.core:core-bundle", version.ref = "jetbrains-core-bundle" }
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+room-gradle-plugin = { group = "androidx.room", name = "room-gradle-plugin", version.ref = "roomGradlePlugin" }
 
 [plugins]
 convention-android-application = { id = "com.alexmls.convention.android.application", version = "unspecified" }
@@ -172,6 +174,7 @@ convention-kmp-library = { id = "com.alexmls.convention.kmp.library", version = 
 convention-cmp-library = { id = "com.alexmls.convention.cmp.library", version = "unspecified" }
 convention-cmp-feature = { id = "com.alexmls.convention.cmp.feature", version = "unspecified" }
 convention-buildkonfig = { id = "com.alexmls.convention.buildkonfig", version = "unspecified" }
+convention-room = { id = "com.alexmls.convention.room", version = "unspecified" }
 
 # Android
 android-application = { id = "com.android.application", version.ref = "agp" }
