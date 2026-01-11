@@ -23,6 +23,11 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import androidx.compose.runtime.snapshotFlow
 
 class RegisterViewModel(
     private val authService: AuthService
@@ -37,7 +42,7 @@ class RegisterViewModel(
     val state = _state
         .onStart {
             if (!hasLoadedInitialData) {
-                /** Load initial data here **/
+                observeValidationStates()
                 hasLoadedInitialData = true
             }
         }
@@ -46,6 +51,31 @@ class RegisterViewModel(
             started = SharingStarted.WhileSubscribed(5_000L),
             initialValue = RegisterState()
         )
+
+    private val isEmailValidFlow = snapshotFlow { state.value.emailTextState.text.toString() }
+        .map { email -> EmailValidator.validate(email) }
+        .distinctUntilChanged()
+
+    private val isUsernameValidFlow = snapshotFlow { state.value.usernameTextState.text.toString() }
+        .map { username -> username.length in 3..20 }
+        .distinctUntilChanged()
+
+    private val isPasswordValidFlow = snapshotFlow { state.value.passwordTextState.text.toString() }
+        .map { password -> PasswordValidator.validate(password).isValidPassword }
+        .distinctUntilChanged()
+
+    private fun observeValidationStates() {
+        combine(
+            isEmailValidFlow,
+            isUsernameValidFlow,
+            isPasswordValidFlow
+        ) { isEmailValid, isUsernameValid, isPasswordValid ->
+            val allValid = isEmailValid && isUsernameValid && isPasswordValid
+            _state.update { it.copy(
+                canRegister = !it.isRegistering && allValid
+            ) }
+        }.launchIn(viewModelScope)
+    }
 
     fun onAction(action: RegisterAction) {
         when (action) {

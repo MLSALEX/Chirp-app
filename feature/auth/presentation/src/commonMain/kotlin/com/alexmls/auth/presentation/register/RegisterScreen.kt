@@ -33,11 +33,12 @@ import com.alexmls.core.designsystem.theme.ChirpTheme
 import com.alexmls.core.presentation.util.ObserveAsEvents
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
 fun RegisterRoot(
-    viewModel: RegisterViewModel = viewModel(),
+    viewModel: RegisterViewModel = koinViewModel(),
     onRegisterSuccess: (String) -> Unit,
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
