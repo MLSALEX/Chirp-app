@@ -2,6 +2,7 @@ package com.alexmls.chirp
 
 import androidx.compose.runtime.Composable
 import com.alexmls.auth.presentation.register.RegisterRoot
+import com.alexmls.auth.presentation.register_success.RegisterSuccessRoot
 import com.alexmls.core.designsystem.theme.ChirpTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -9,8 +10,8 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App() {
     ChirpTheme {
-        RegisterRoot(
-            onRegisterSuccess = {}
+        RegisterSuccessRoot(
+
         )
     }
 }
