@@ -1,5 +1,6 @@
 package com.alexmls.core.data.auth
 
+import com.alexmls.core.data.dto.requests.EmailRequest
 import com.alexmls.core.data.dto.requests.RegisterRequest
 import com.alexmls.core.data.networking.post
 import com.alexmls.core.domain.auth.AuthService
@@ -23,6 +24,13 @@ class KtorAuthService(
                 username = username,
                 password = password
             )
+        )
+    }
+
+    override suspend fun resendVerificationEmail(email: String): EmptyResult<DataError.Remote> {
+        return httpClient.post(
+            route = "/auth/resend-verification",
+            body = EmailRequest(email),
         )
     }
 }
