@@ -7,9 +7,12 @@ struct iOSApp: App {
      init() {
             InitKoinKt.doInitKoin()
      }
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
-    }
+   var body: some Scene {
+       WindowGroup {
+           ContentView()
+               .onOpenURL { url in
+                   ExternalUriHandler.shared.onNewUri(uri: url.absoluteString)
+               }
+       }
+   }
 }
