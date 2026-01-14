@@ -1,4 +1,4 @@
-package com.alexmls.auth.presentation
+package com.alexmls.auth.presentation.login
 
 import androidx.compose.foundation.text.input.TextFieldState
 import com.alexmls.core.presentation.util.UiText

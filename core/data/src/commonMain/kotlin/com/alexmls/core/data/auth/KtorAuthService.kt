@@ -1,17 +1,40 @@
 package com.alexmls.core.data.auth
 
+import com.alexmls.core.data.dto.AuthInfoSerializable
 import com.alexmls.core.data.dto.requests.EmailRequest
+import com.alexmls.core.data.dto.requests.LoginRequest
 import com.alexmls.core.data.dto.requests.RegisterRequest
+import com.alexmls.core.data.mappers.toDomain
 import com.alexmls.core.data.networking.get
 import com.alexmls.core.data.networking.post
+import com.alexmls.core.domain.auth.AuthInfo
 import com.alexmls.core.domain.auth.AuthService
 import com.alexmls.core.domain.util.DataError
 import com.alexmls.core.domain.util.EmptyResult
 import io.ktor.client.HttpClient
+import com.alexmls.core.domain.util.map
+import com.alexmls.core.domain.util.Result
+import com.alexmls.core.domain.util.onSuccess
 
 class KtorAuthService(
     private val httpClient: HttpClient
 ): AuthService {
+
+    override suspend fun login(
+        email: String,
+        password: String
+    ): Result<AuthInfo, DataError.Remote> {
+        return httpClient.post<LoginRequest, AuthInfoSerializable>(
+            route = "/auth/login",
+            body = LoginRequest(
+                email = email,
+                password = password
+            )
+        ).map { authInfoSerializable ->
+            authInfoSerializable.toDomain()
+        }
+    }
+
 
     override suspend fun register(
         email: String,

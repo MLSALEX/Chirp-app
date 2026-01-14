@@ -1,4 +1,4 @@
-package com.alexmls.auth.presentation
+package com.alexmls.auth.presentation.login
 
 sealed interface LoginAction {
     data object OnTogglePasswordVisibility: LoginAction

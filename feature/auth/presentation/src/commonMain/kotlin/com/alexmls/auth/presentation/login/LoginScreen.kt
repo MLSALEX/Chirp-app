@@ -1,4 +1,4 @@
-package com.alexmls.auth.presentation
+package com.alexmls.auth.presentation.login
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import chirp.feature.auth.presentation.generated.resources.Res
 import chirp.feature.auth.presentation.generated.resources.create_account
 import chirp.feature.auth.presentation.generated.resources.email
@@ -30,6 +29,7 @@ import com.alexmls.core.designsystem.components.layouts.ChirpAdaptiveFormLayout
 import com.alexmls.core.designsystem.components.textfields.ChirpPasswordTextField
 import com.alexmls.core.designsystem.components.textfields.ChirpTextField
 import com.alexmls.core.designsystem.theme.ChirpTheme
+import com.alexmls.core.presentation.util.ObserveAsEvents
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -42,6 +42,12 @@ fun LoginRoot(
     onCreateAccountClick: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when(event) {
+            LoginEvent.Success -> onLoginSuccess()
+        }
+    }
 
     LoginScreen(
         state = state,

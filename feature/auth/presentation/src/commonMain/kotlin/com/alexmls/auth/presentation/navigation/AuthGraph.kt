@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navDeepLink
 import androidx.navigation.navigation
-import com.alexmls.auth.presentation.LoginRoot
+import com.alexmls.auth.presentation.login.LoginRoot
 import com.alexmls.auth.presentation.email_verification.EmailVerificationRoot
 import com.alexmls.auth.presentation.register.RegisterRoot
 import com.alexmls.auth.presentation.register_success.RegisterSuccessRoot
@@ -50,7 +50,15 @@ fun NavGraphBuilder.authGraph(
             )
         }
         composable<AuthGraphRoutes.RegisterSuccess> {
-            RegisterSuccessRoot()
+            RegisterSuccessRoot(
+                onLoginClick = {
+                    navController.navigate(AuthGraphRoutes.Login) {
+                        popUpTo<AuthGraphRoutes.RegisterSuccess> {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
         composable<AuthGraphRoutes.EmailVerification>(
             deepLinks = listOf(
@@ -62,7 +70,22 @@ fun NavGraphBuilder.authGraph(
                 },
             )
         ) {
-            EmailVerificationRoot()
+            EmailVerificationRoot(
+                onLoginClick = {
+                    navController.navigate(AuthGraphRoutes.Login) {
+                        popUpTo<AuthGraphRoutes.EmailVerification> {
+                            inclusive = true
+                        }
+                    }
+                },
+                onCloseClick = {
+                    navController.navigate(AuthGraphRoutes.Login) {
+                        popUpTo<AuthGraphRoutes.EmailVerification> {
+                            inclusive = true
+                        }
+                    }
+                }
+            )
         }
     }
 }
