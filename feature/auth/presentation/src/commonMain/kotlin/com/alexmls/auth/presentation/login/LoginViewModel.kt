@@ -8,6 +8,7 @@ import chirp.feature.auth.presentation.generated.resources.error_email_not_verif
 import chirp.feature.auth.presentation.generated.resources.error_invalid_credentials
 import com.alexmls.auth.domain.EmailValidator
 import com.alexmls.core.domain.auth.AuthService
+import com.alexmls.core.domain.auth.SessionStorage
 import com.alexmls.core.presentation.util.UiText
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +28,8 @@ import com.alexmls.core.domain.util.onSuccess
 import com.alexmls.core.presentation.util.toUiText
 
 class LoginViewModel(
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val sessionStorage: SessionStorage
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -107,6 +109,7 @@ class LoginViewModel(
                     password = password
                 )
                 .onSuccess { authInfo ->
+                    sessionStorage.set(authInfo)
                     _state.update {
                         it.copy(
                             isLoggingIn = false
