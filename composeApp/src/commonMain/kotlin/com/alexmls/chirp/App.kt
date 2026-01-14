@@ -5,11 +5,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
-import com.alexmls.auth.presentation.chat_list.ChatListRoute
+import com.alexmls.chat.presentation.chat_list.ChatListRoute
 import com.alexmls.auth.presentation.navigation.AuthGraphRoutes
 import com.alexmls.chirp.navigation.DeepLinkListener
 import com.alexmls.chirp.navigation.NavigationRoot
 import com.alexmls.core.designsystem.theme.ChirpTheme
+import com.alexmls.core.presentation.util.ObserveAsEvents
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -27,6 +28,18 @@ fun App(
     LaunchedEffect(state.isCheckingAuth) {
         if(!state.isCheckingAuth) {
             onAuthenticationChecked()
+        }
+    }
+
+    ObserveAsEvents(viewModel.events) { event ->
+        when(event) {
+            is MainEvent.OnSessionExpired -> {
+                navController.navigate(AuthGraphRoutes.Graph) {
+                    popUpTo(AuthGraphRoutes.Graph) {
+                        inclusive = false
+                    }
+                }
+            }
         }
     }
 

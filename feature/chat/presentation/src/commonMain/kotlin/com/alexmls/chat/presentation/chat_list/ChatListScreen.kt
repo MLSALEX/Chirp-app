@@ -1,4 +1,4 @@
-package com.alexmls.auth.presentation.chat_list
+package com.alexmls.chat.presentation.chat_list
 
 
 import androidx.compose.foundation.layout.Box
@@ -8,9 +8,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import kotlinx.serialization.Serializable
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun ChatListScreenRoot() {
+fun ChatListScreenRoot(
+    viewModel: ChatListViewModel = koinViewModel()
+) {
     Box(
         modifier = Modifier
             .fillMaxSize(),
