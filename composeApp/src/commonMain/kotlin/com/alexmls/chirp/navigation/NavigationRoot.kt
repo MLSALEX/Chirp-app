@@ -11,11 +11,14 @@ import com.alexmls.auth.presentation.navigation.AuthGraphRoutes
 import com.alexmls.auth.presentation.navigation.authGraph
 
 @Composable
-fun NavigationRoot(navController: NavHostController) {
+fun NavigationRoot(
+    navController: NavHostController,
+    startDestination: Any
+) {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = AuthGraphRoutes.Graph
+        startDestination = startDestination
     ) {
         authGraph(
             navController = navController,
