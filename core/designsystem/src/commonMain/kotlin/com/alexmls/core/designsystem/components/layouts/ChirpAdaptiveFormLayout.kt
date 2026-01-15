@@ -31,6 +31,7 @@ import com.alexmls.core.presentation.util.DeviceConfiguration
 import com.alexmls.core.presentation.util.currentDeviceConfiguration
 import com.alexmls.core.designsystem.components.brand.ChirpBrandLogo
 import com.alexmls.core.designsystem.theme.ChirpTheme
+import com.alexmls.core.presentation.util.clearFocusOnTap
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -52,6 +53,7 @@ fun ChirpAdaptiveFormLayout(
         DeviceConfiguration.MOBILE_PORTRAIT -> {
             ChirpSurface(
                 modifier = modifier
+                    .clearFocusOnTap()
                     .consumeWindowInsets(WindowInsets.navigationBars)
                     .consumeWindowInsets(WindowInsets.displayCutout),
                 header = {
