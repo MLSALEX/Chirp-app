@@ -8,6 +8,8 @@ import com.alexmls.chat.presentation.chat_list.ChatListRoute
 import com.alexmls.chat.presentation.chat_list.ChatListScreenRoot
 import com.alexmls.auth.presentation.navigation.AuthGraphRoutes
 import com.alexmls.auth.presentation.navigation.authGraph
+import com.alexmls.chat.presentation.navigation.ChatGraphRoutes
+import com.alexmls.chat.presentation.navigation.chatGraph
 
 @Composable
 fun NavigationRoot(
@@ -21,16 +23,15 @@ fun NavigationRoot(
         authGraph(
             navController = navController,
             onLoginSuccess = {
-                navController.navigate(ChatListRoute) {
+                navController.navigate(ChatGraphRoutes.Graph) {
                     popUpTo(AuthGraphRoutes.Graph) {
                         inclusive = true
                     }
                 }
             }
         )
-
-        composable<ChatListRoute> {
-            ChatListScreenRoot()
-        }
+        chatGraph(
+            navController = navController
+        )
     }
 }
