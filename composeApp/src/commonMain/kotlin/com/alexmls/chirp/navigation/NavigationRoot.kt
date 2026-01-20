@@ -3,9 +3,6 @@ package com.alexmls.chirp.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import com.alexmls.chat.presentation.chat_list.ChatListRoute
-import com.alexmls.chat.presentation.chat_list.ChatListScreenRoot
 import com.alexmls.auth.presentation.navigation.AuthGraphRoutes
 import com.alexmls.auth.presentation.navigation.authGraph
 import com.alexmls.chat.presentation.navigation.ChatGraphRoutes

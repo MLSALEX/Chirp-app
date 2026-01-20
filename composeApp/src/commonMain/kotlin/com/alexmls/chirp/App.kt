@@ -5,7 +5,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.rememberNavController
-import com.alexmls.chat.presentation.chat_list.ChatListRoute
 import com.alexmls.auth.presentation.navigation.AuthGraphRoutes
 import com.alexmls.chat.presentation.navigation.ChatGraphRoutes
 import com.alexmls.chirp.navigation.DeepLinkListener
