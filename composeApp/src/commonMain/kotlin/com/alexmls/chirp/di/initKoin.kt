@@ -1,6 +1,7 @@
 package com.alexmls.chirp.di
 
 import com.alexmls.auth.presentation.di.authPresentationModule
+import com.alexmls.chat.data.di.chatDataModule
 import com.alexmls.chat.presentation.di.chatPresentationModule
 import com.alexmls.core.data.di.coreDataModule
 import com.alexmls.core.presentation.di.corePresentationModule
@@ -15,7 +16,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
             authPresentationModule,
             appModule,
             chatPresentationModule,
-            corePresentationModule
+            corePresentationModule,
+            chatDataModule
         )
     }
 }
