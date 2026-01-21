@@ -1,4 +1,4 @@
-package com.alexmls.chat.presentation.chat_list
+package com.alexmls.chat.presentation.chat_list.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
