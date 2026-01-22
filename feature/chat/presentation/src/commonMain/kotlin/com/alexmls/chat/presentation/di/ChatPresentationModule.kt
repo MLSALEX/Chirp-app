@@ -1,5 +1,6 @@
 package com.alexmls.chat.presentation.di
 
+import com.alexmls.chat.presentation.chat_detail.ChatDetailViewModel
 import com.alexmls.chat.presentation.chat_list.ChatListViewModel
 import com.alexmls.chat.presentation.chat_list_detail.ChatListDetailViewModel
 import com.alexmls.chat.presentation.create_chat.CreateChatViewModel
@@ -10,4 +11,5 @@ val chatPresentationModule = module {
     viewModelOf(::ChatListViewModel)
     viewModelOf(::ChatListDetailViewModel)
     viewModelOf(::CreateChatViewModel)
+    viewModelOf(::ChatDetailViewModel)
 }
