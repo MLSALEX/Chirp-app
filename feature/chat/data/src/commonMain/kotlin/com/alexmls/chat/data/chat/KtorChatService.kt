@@ -5,6 +5,7 @@ import com.alexmls.chat.data.dto.request.CreateChatRequest
 import com.alexmls.chat.data.mappers.toDomain
 import com.alexmls.chat.domain.chat.ChatService
 import com.alexmls.chat.domain.models.Chat
+import com.alexmls.core.data.networking.get
 import com.alexmls.core.data.networking.post
 import com.alexmls.core.domain.util.DataError
 import com.alexmls.core.domain.util.Result
@@ -22,5 +23,12 @@ class KtorChatService(
                 otherUserIds = otherUserIds
             )
         ).map { it.toDomain() }
+    }
+    override suspend fun getChats(): Result<List<Chat>, DataError.Remote> {
+        return httpClient.get<List<ChatDto>>(
+            route = "/chat"
+        ).map { chatDtos ->
+            chatDtos.map { it.toDomain() }
+        }
     }
 }
