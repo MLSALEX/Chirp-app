@@ -5,10 +5,13 @@ import com.alexmls.chat.data.dto.request.CreateChatRequest
 import com.alexmls.chat.data.mappers.toDomain
 import com.alexmls.chat.domain.chat.ChatService
 import com.alexmls.chat.domain.models.Chat
+import com.alexmls.core.data.networking.delete
 import com.alexmls.core.data.networking.get
 import com.alexmls.core.data.networking.post
 import com.alexmls.core.domain.util.DataError
+import com.alexmls.core.domain.util.EmptyResult
 import com.alexmls.core.domain.util.Result
+import com.alexmls.core.domain.util.asEmptyResult
 import io.ktor.client.HttpClient
 import com.alexmls.core.domain.util.map
 
@@ -36,5 +39,11 @@ class KtorChatService(
         return httpClient.get<ChatDto>(
             route = "/chat/$chatId"
         ).map { it.toDomain() }
+    }
+
+    override suspend fun leaveChat(chatId: String): EmptyResult<DataError.Remote> {
+        return httpClient.delete<Unit>(
+            route = "/chat/$chatId/leave"
+        ).asEmptyResult()
     }
 }
