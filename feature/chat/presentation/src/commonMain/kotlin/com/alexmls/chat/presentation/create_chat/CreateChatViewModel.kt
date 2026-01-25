@@ -7,31 +7,31 @@ import androidx.lifecycle.viewModelScope
 import chirp.feature.chat.presentation.generated.resources.Res
 import chirp.feature.chat.presentation.generated.resources.error_participant_not_found
 import com.alexmls.chat.domain.chat.ChatParticipantService
-import com.alexmls.chat.domain.chat.ChatService
+import com.alexmls.chat.domain.chat.ChatRepository
 import com.alexmls.chat.presentation.mappers.toUi
 import com.alexmls.core.domain.util.DataError
+import com.alexmls.core.domain.util.onFailure
+import com.alexmls.core.domain.util.onSuccess
 import com.alexmls.core.presentation.util.UiText
+import com.alexmls.core.presentation.util.toUiText
 import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import com.alexmls.core.presentation.util.toUiText
-import com.alexmls.core.domain.util.onFailure
-import com.alexmls.core.domain.util.onSuccess
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.receiveAsFlow
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(FlowPreview::class)
 class CreateChatViewModel(
     private val chatParticipantService: ChatParticipantService,
-    private val chatService: ChatService
+    private val chatRepository: ChatRepository
 ) : ViewModel() {
 
     private var hasLoadedInitialData = false
@@ -138,7 +138,7 @@ class CreateChatViewModel(
                 )
             }
 
-            chatService
+            chatRepository
                 .createChat(userIds)
                 .onSuccess { chat ->
                     _state.update {
