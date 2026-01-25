@@ -20,6 +20,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.alexmls.core.designsystem.components.avatar.ChatParticipantUi
 import com.alexmls.core.designsystem.components.avatar.ChirpAvatarPhoto
+import com.alexmls.core.designsystem.components.brand.ChirpHorizontalDivider
 import com.alexmls.core.designsystem.theme.extended
 import com.alexmls.core.designsystem.theme.titleXSmall
 import com.alexmls.core.presentation.util.DeviceConfiguration
@@ -27,6 +28,7 @@ import com.alexmls.core.presentation.util.currentDeviceConfiguration
 
 @Composable
 fun ColumnScope.ChatParticipantsSelectionSection(
+    existingParticipants: List<ChatParticipantUi>,
     selectedParticipants: List<ChatParticipantUi>,
     modifier: Modifier = Modifier,
     searchResult: ChatParticipantUi? = null
@@ -52,7 +54,24 @@ fun ColumnScope.ChatParticipantsSelectionSection(
             modifier = Modifier
                 .fillMaxWidth()
         ) {
-            searchResult?.let {
+            items(
+                items = existingParticipants,
+                key = { "existing_${it.id}"}
+            ) { participant ->
+                ChatParticipantListItem(
+                    participantUi = participant,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+            }
+
+            if(existingParticipants.isNotEmpty()) {
+                item {
+                    ChirpHorizontalDivider()
+                }
+            }
+
+                searchResult?.let {
                 item {
                     ChatParticipantListItem(
                         participantUi = searchResult,

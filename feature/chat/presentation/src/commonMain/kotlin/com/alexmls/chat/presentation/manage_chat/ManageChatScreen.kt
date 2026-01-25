@@ -1,11 +1,11 @@
-package com.alexmls.chat.presentation.create_chat
+package com.alexmls.chat.presentation.manage_chat
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import chirp.feature.chat.presentation.generated.resources.Res
-import chirp.feature.chat.presentation.generated.resources.create_chat
-import com.alexmls.chat.domain.models.Chat
+import chirp.feature.chat.presentation.generated.resources.chat_members
+import chirp.feature.chat.presentation.generated.resources.save
 import com.alexmls.chat.presentation.components.manage_chat.ManageChatAction
 import com.alexmls.chat.presentation.components.manage_chat.ManageChatScreen
 import com.alexmls.core.designsystem.components.dialogs.ChirpAdaptiveDialogSheetLayout
@@ -14,16 +14,16 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun CreateChatRoot(
+fun ManageChatRoot(
     onDismiss: () -> Unit,
-    onChatCreated: (Chat) -> Unit,
-    viewModel: CreateChatViewModel = koinViewModel()
+    onMembersAdded: () -> Unit,
+    viewModel: ManageChatViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     ObserveAsEvents(viewModel.events) { event ->
-        when(event) {
-            is CreateChatEvent.OnChatCreated -> onChatCreated(event.chat)
+        when (event) {
+            is ManageChatEvent.OnMembersAdded -> onMembersAdded()
         }
     }
 
@@ -31,11 +31,11 @@ fun CreateChatRoot(
         onDismiss = onDismiss
     ) {
         ManageChatScreen(
-            headerText = stringResource(Res.string.create_chat),
-            primaryButtonText = stringResource(Res.string.create_chat),
+            headerText = stringResource(Res.string.chat_members),
+            primaryButtonText = stringResource(Res.string.save),
             state = state,
             onAction = { action ->
-                when(action) {
+                when (action) {
                     ManageChatAction.OnDismissDialog -> onDismiss()
                     else -> Unit
                 }

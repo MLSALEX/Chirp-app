@@ -1,11 +1,12 @@
-package com.alexmls.chat.presentation.create_chat
+package com.alexmls.chat.presentation.components.manage_chat
 
 import androidx.compose.foundation.text.input.TextFieldState
 import com.alexmls.core.designsystem.components.avatar.ChatParticipantUi
 import com.alexmls.core.presentation.util.UiText
 
-data class CreateChatState(
+data class ManageChatState(
     val queryTextState: TextFieldState = TextFieldState(),
+    val existingChatParticipants: List<ChatParticipantUi> = emptyList(),
     val selectedChatParticipants: List<ChatParticipantUi> = emptyList(),
     val isSearching: Boolean = false,
     val canAddParticipant: Boolean = false,
