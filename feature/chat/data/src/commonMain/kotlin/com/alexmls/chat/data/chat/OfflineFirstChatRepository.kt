@@ -8,11 +8,15 @@ import com.alexmls.chat.database.entities.ChatWithParticipants
 import com.alexmls.chat.domain.chat.ChatRepository
 import com.alexmls.chat.domain.chat.ChatService
 import com.alexmls.chat.domain.models.Chat
+import com.alexmls.chat.domain.models.ChatInfo
 import com.alexmls.core.domain.util.DataError
+import com.alexmls.core.domain.util.EmptyResult
 import com.alexmls.core.domain.util.onSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import com.alexmls.core.domain.util.Result
+import com.alexmls.core.domain.util.asEmptyResult
+import kotlinx.coroutines.flow.filterNotNull
 
 class OfflineFirstChatRepository(
     private val chatService: ChatService,
@@ -24,6 +28,12 @@ class OfflineFirstChatRepository(
             .map { chatWithParticipantsList ->
                 chatWithParticipantsList.map { it.toDomain() }
             }
+    }
+
+    override fun getChatInfoById(chatId: String): Flow<ChatInfo> {
+        return db.chatDao.getChatInfoById(chatId)
+            .filterNotNull()
+            .map { it.toDomain() }
     }
 
     override suspend fun fetchChats(): Result<List<Chat>, DataError.Remote> {
@@ -45,5 +55,19 @@ class OfflineFirstChatRepository(
                     messageDao = db.chatMessageDao
                 )
             }
+    }
+
+    override suspend fun fetchChatById(chatId: String): EmptyResult<DataError.Remote> {
+        return chatService
+            .getChatById(chatId)
+            .onSuccess { chat ->
+                db.chatDao.upsertChatWithParticipantsAndCrossRefs(
+                    chat = chat.toEntity(),
+                    participants = chat.participants.map { it.toEntity() },
+                    participantDao = db.chatParticipantDao,
+                    crossRefDao = db.chatParticipantsCrossRefDao
+                )
+            }
+            .asEmptyResult()
     }
 }
