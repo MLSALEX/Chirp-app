@@ -35,7 +35,7 @@ import chirp.feature.chat.presentation.generated.resources.no_chats
 import chirp.feature.chat.presentation.generated.resources.no_chats_subtitle
 import com.alexmls.chat.presentation.chat_list.components.ChatListHeader
 import com.alexmls.chat.presentation.chat_list.components.ChatListItemUi
-import com.alexmls.chat.presentation.chat_list.components.EmptyListSection
+import com.alexmls.chat.presentation.chat_list.components.EmptySection
 import com.alexmls.chat.presentation.model.ChatUi
 import com.alexmls.core.designsystem.components.brand.ChirpHorizontalDivider
 import com.alexmls.core.designsystem.components.buttons.ChirpFloatingActionButton
@@ -129,7 +129,7 @@ fun ChatListScreen(
                     )
                 }
                 state.chats.isEmpty() -> {
-                    EmptyListSection(
+                    EmptySection(
                         title = stringResource(Res.string.no_chats),
                         description = stringResource(Res.string.no_chats_subtitle),
                         modifier = Modifier

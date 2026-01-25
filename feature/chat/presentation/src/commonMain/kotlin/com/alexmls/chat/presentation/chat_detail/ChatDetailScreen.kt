@@ -32,11 +32,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import chirp.feature.chat.presentation.generated.resources.Res
+import chirp.feature.chat.presentation.generated.resources.no_chat_selected
+import chirp.feature.chat.presentation.generated.resources.select_a_chat
 import com.alexmls.chat.domain.models.ChatMessage
 import com.alexmls.chat.domain.models.ChatMessageDeliveryStatus
 import com.alexmls.chat.presentation.chat_detail.components.ChatDetailHeader
 import com.alexmls.chat.presentation.chat_detail.components.MessageBox
 import com.alexmls.chat.presentation.chat_detail.components.MessageList
+import com.alexmls.chat.presentation.chat_list.components.EmptySection
 import com.alexmls.chat.presentation.components.ChatHeader
 import com.alexmls.chat.presentation.model.ChatUi
 import com.alexmls.chat.presentation.model.MessageUi
@@ -47,6 +51,7 @@ import com.alexmls.core.presentation.util.ObserveAsEvents
 import com.alexmls.core.presentation.util.UiText
 import com.alexmls.core.presentation.util.clearFocusOnTap
 import com.alexmls.core.presentation.util.currentDeviceConfiguration
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 import kotlin.time.Clock
@@ -141,28 +146,37 @@ fun ChatDetailScreen(
                         .weight(1f)
                         .fillMaxWidth()
                 ) {
-                    ChatHeader {
-                        ChatDetailHeader(
-                            chatUi = state.chatUi,
-                            isDetailPresent = isDetailPresent,
-                            isChatOptionsDropDownOpen = state.isChatOptionsOpen,
-                            onChatOptionsClick = {
-                                onAction(ChatDetailAction.OnChatOptionsClick)
-                            },
-                            onDismissChatOptions = {
-                                onAction(ChatDetailAction.OnDismissChatOptions)
-                            },
-                            onManageChatClick = {
-                                onAction(ChatDetailAction.OnChatMembersClick)
-                            },
-                            onLeaveChatClick = {
-                                onAction(ChatDetailAction.OnLeaveChatClick)
-                            },
-                            onBackClick = {
-                                onAction(ChatDetailAction.OnBackClick)
-                            },
-                            modifier = Modifier.fillMaxWidth()
+                    if(state.chatUi == null) {
+                        EmptySection(
+                            title = stringResource(Res.string.no_chat_selected),
+                            description = stringResource(Res.string.select_a_chat),
+                            modifier = Modifier
+                                .fillMaxSize()
                         )
+                    }else {
+                        ChatHeader {
+                            ChatDetailHeader(
+                                chatUi = state.chatUi,
+                                isDetailPresent = isDetailPresent,
+                                isChatOptionsDropDownOpen = state.isChatOptionsOpen,
+                                onChatOptionsClick = {
+                                    onAction(ChatDetailAction.OnChatOptionsClick)
+                                },
+                                onDismissChatOptions = {
+                                    onAction(ChatDetailAction.OnDismissChatOptions)
+                                },
+                                onManageChatClick = {
+                                    onAction(ChatDetailAction.OnChatMembersClick)
+                                },
+                                onLeaveChatClick = {
+                                    onAction(ChatDetailAction.OnLeaveChatClick)
+                                },
+                                onBackClick = {
+                                    onAction(ChatDetailAction.OnBackClick)
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
                     }
 
                     MessageList(
