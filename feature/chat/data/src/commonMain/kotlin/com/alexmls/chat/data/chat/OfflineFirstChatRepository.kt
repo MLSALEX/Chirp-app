@@ -2,10 +2,10 @@
 
 package com.alexmls.chat.data.chat
 
-import com.alexmls.chat.data.lifecycle.AppLifecycleObserver
 import com.alexmls.chat.data.mappers.toDomain
 import com.alexmls.chat.data.mappers.toEntity
 import com.alexmls.chat.data.mappers.toLastMessageView
+import com.alexmls.chat.data.network.ConnectivityObserver
 import com.alexmls.chat.database.ChirpChatDatabase
 import com.alexmls.chat.database.entities.ChatInfoEntity
 import com.alexmls.chat.database.entities.ChatParticipantEntity
@@ -17,30 +17,30 @@ import com.alexmls.chat.domain.models.ChatInfo
 import com.alexmls.chat.domain.models.ChatParticipant
 import com.alexmls.core.domain.util.DataError
 import com.alexmls.core.domain.util.EmptyResult
-import com.alexmls.core.domain.util.onSuccess
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import com.alexmls.core.domain.util.Result
 import com.alexmls.core.domain.util.asEmptyResult
+import com.alexmls.core.domain.util.onSuccess
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.supervisorScope
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.supervisorScope
 
 class OfflineFirstChatRepository(
     private val chatService: ChatService,
     private val db: ChirpChatDatabase,
-    private val observer: AppLifecycleObserver
+    private val observer: ConnectivityObserver
 ): ChatRepository {
 
     init {
-        observer.isInForeground.onEach { isInForeground ->
-            println("Is app in foreground? $isInForeground")
+        observer.isConnected.onEach { isConnected ->
+            println("Is app connected? $isConnected")
         }.launchIn(GlobalScope)
     }
 
