@@ -1,6 +1,7 @@
 package com.alexmls.chat.data.mappers
 
 import com.alexmls.chat.data.dto.ChatMessageDto
+import com.alexmls.chat.data.dto.websocket.IncomingWebSocketDto
 import com.alexmls.chat.data.dto.websocket.OutgoingWebSocketDto
 import com.alexmls.chat.database.entities.ChatMessageEntity
 import com.alexmls.chat.database.view.LastMessageView
@@ -68,5 +69,17 @@ fun ChatMessage.toNewMessage(): OutgoingWebSocketDto.NewMessage {
         messageId = id,
         chatId = chatId,
         content = content,
+    )
+}
+
+
+fun IncomingWebSocketDto.NewMessageDto.toEntity(): ChatMessageEntity {
+    return ChatMessageEntity(
+        messageId = id,
+        chatId = chatId,
+        senderId = senderId,
+        content = content,
+        timestamp = Instant.parse(createdAt).toEpochMilliseconds(),
+        deliveryStatus = ChatMessageDeliveryStatus.SENT.name
     )
 }
