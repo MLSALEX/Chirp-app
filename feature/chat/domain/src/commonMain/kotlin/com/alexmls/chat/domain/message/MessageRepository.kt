@@ -3,6 +3,7 @@ package com.alexmls.chat.domain.message
 import com.alexmls.chat.domain.models.ChatMessage
 import com.alexmls.chat.domain.models.ChatMessageDeliveryStatus
 import com.alexmls.chat.domain.models.MessageWithSender
+import com.alexmls.chat.domain.models.OutgoingNewMessage
 import com.alexmls.core.domain.util.DataError
 import com.alexmls.core.domain.util.EmptyResult
 import kotlinx.coroutines.flow.Flow
@@ -18,6 +19,8 @@ interface MessageRepository {
         chatId: String,
         before: String? = null
     ): Result<List<ChatMessage>, DataError>
+
+    suspend fun sendMessage(message: OutgoingNewMessage): EmptyResult<DataError>
 
     fun getMessagesForChat(chatId: String): Flow<List<MessageWithSender>>
 }
