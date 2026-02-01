@@ -4,8 +4,10 @@ import com.alexmls.chat.data.dto.ChatMessageDto
 import com.alexmls.chat.data.mappers.toDomain
 import com.alexmls.chat.domain.message.ChatMessageService
 import com.alexmls.chat.domain.models.ChatMessage
+import com.alexmls.core.data.networking.delete
 import com.alexmls.core.data.networking.get
 import com.alexmls.core.domain.util.DataError
+import com.alexmls.core.domain.util.EmptyResult
 import com.alexmls.core.domain.util.Result
 import com.alexmls.core.domain.util.map
 import io.ktor.client.HttpClient
@@ -13,6 +15,12 @@ import io.ktor.client.HttpClient
 class KtorChatMessageService(
     private val httpClient: HttpClient
 ): ChatMessageService {
+
+    override suspend fun deleteMessage(messageId: String): EmptyResult<DataError.Remote> {
+        return httpClient.delete(
+            route = "/messages/$messageId"
+        )
+    }
 
     override suspend fun fetchMessages(
         chatId: String,
