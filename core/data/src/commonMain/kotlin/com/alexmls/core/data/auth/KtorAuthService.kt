@@ -1,6 +1,7 @@
 package com.alexmls.core.data.auth
 
 import com.alexmls.core.data.dto.AuthInfoSerializable
+import com.alexmls.core.data.dto.requests.ChangePasswordRequest
 import com.alexmls.core.data.dto.requests.EmailRequest
 import com.alexmls.core.data.dto.requests.LoginRequest
 import com.alexmls.core.data.dto.requests.RegisterRequest
@@ -12,10 +13,9 @@ import com.alexmls.core.domain.auth.AuthInfo
 import com.alexmls.core.domain.auth.AuthService
 import com.alexmls.core.domain.util.DataError
 import com.alexmls.core.domain.util.EmptyResult
-import io.ktor.client.HttpClient
-import com.alexmls.core.domain.util.map
 import com.alexmls.core.domain.util.Result
-import com.alexmls.core.domain.util.onSuccess
+import com.alexmls.core.domain.util.map
+import io.ktor.client.HttpClient
 
 class KtorAuthService(
     private val httpClient: HttpClient
@@ -82,6 +82,19 @@ class KtorAuthService(
             body = ResetPasswordRequest(
                 newPassword = newPassword,
                 token = token
+            )
+        )
+    }
+
+    override suspend fun changePassword(
+        currentPassword: String,
+        newPassword: String
+    ): EmptyResult<DataError.Remote> {
+        return httpClient.post(
+            route = "/auth/change-password",
+            body = ChangePasswordRequest(
+                oldPassword = currentPassword,
+                newPassword = newPassword
             )
         )
     }
