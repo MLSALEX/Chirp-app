@@ -4,6 +4,12 @@ import com.alexmls.chat.domain.models.MessageWithSender
 import com.alexmls.chat.presentation.model.MessageUi
 import com.alexmls.chat.presentation.util.DateUtils
 
+fun List<MessageWithSender>.toUiList(localUserId: String): List<MessageUi> {
+    return this
+        .sortedByDescending { it.message.createdAt }
+        .map { it.toUi(localUserId) }
+}
+
 fun MessageWithSender.toUi(
     localUserId: String,
 ): MessageUi {

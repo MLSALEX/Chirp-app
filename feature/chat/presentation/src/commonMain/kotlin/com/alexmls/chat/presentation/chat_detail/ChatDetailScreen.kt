@@ -39,6 +39,7 @@ import com.alexmls.chat.domain.models.ChatMessageDeliveryStatus
 import com.alexmls.chat.presentation.chat_detail.components.ChatDetailHeader
 import com.alexmls.chat.presentation.chat_detail.components.MessageBox
 import com.alexmls.chat.presentation.chat_detail.components.MessageList
+import com.alexmls.chat.presentation.chat_detail.components.PaginationScrollListener
 import com.alexmls.chat.presentation.chat_list.components.EmptySection
 import com.alexmls.chat.presentation.components.ChatHeader
 import com.alexmls.chat.presentation.model.ChatUi
@@ -72,7 +73,7 @@ fun ChatDetailRoot(
 
     val snackbarState = remember { SnackbarHostState() }
     ObserveAsEvents(viewModel.events) { event ->
-        when(event) {
+        when (event) {
             ChatDetailEvent.OnChatLeft -> onBack()
             ChatDetailEvent.OnNewMessage -> {
                 // TODO: Auto scroll to bottom
@@ -104,7 +105,7 @@ fun ChatDetailRoot(
         state = state,
         isDetailPresent = isDetailPresent,
         onAction = { action ->
-            when(action) {
+            when (action) {
                 is ChatDetailAction.OnChatMembersClick -> onChatMembersClick()
                 else -> Unit
             }
@@ -123,6 +124,23 @@ fun ChatDetailScreen(
 ) {
     val configuration = currentDeviceConfiguration()
     val messageListState = rememberLazyListState()
+
+    val realMessageItemCount = remember(state.messages) {
+        state
+            .messages
+            .filter { it is MessageUi.LocalUserMessage || it is MessageUi.OtherUserMessage }
+            .size
+    }
+
+    PaginationScrollListener(
+        lazyListState = messageListState,
+        itemCount = realMessageItemCount,
+        isPaginationLoading = state.isPaginationLoading,
+        isEndReached = state.endReached,
+        onNearTop = {
+            onAction(ChatDetailAction.OnScrollToTop)
+        }
+    )
 
     Scaffold(
         modifier = Modifier
@@ -155,7 +173,7 @@ fun ChatDetailScreen(
                         .weight(1f)
                         .fillMaxWidth()
                 ) {
-                    if(state.chatUi == null) {
+                    if (state.chatUi == null) {
                         EmptySection(
                             title = stringResource(Res.string.no_chat_selected),
                             description = stringResource(Res.string.select_a_chat),
@@ -192,6 +210,8 @@ fun ChatDetailScreen(
                         messages = state.messages,
                         messageWithOpenMenu = state.messageWithOpenMenu,
                         listState = messageListState,
+                        isPaginationLoading = state.isPaginationLoading,
+                        paginationError = state.paginationError?.asString(),
                         onMessageLongClick = { message ->
                             onAction(ChatDetailAction.OnMessageLongClick(message))
                         },
@@ -203,6 +223,9 @@ fun ChatDetailScreen(
                         },
                         onDeleteMessageClick = { message ->
                             onAction(ChatDetailAction.OnDeleteMessageClick(message))
+                        },
+                        onRetryPaginationClick = {
+                            onAction(ChatDetailAction.OnRetryPaginationClick)
                         },
                         modifier = Modifier
                             .fillMaxWidth()
@@ -229,7 +252,7 @@ fun ChatDetailScreen(
                     }
                 }
 
-                if(configuration.isWideScreen) {
+                if (configuration.isWideScreen) {
                     Spacer(modifier = Modifier.height(8.dp))
                 }
 
@@ -334,7 +357,7 @@ private fun ChatDetailMessagesPreview() {
                     lastMessageSenderUsername = "Philipp"
                 ),
                 messages = (1..20).map {
-                    if(it % 2 == 0) {
+                    if (it % 2 == 0) {
                         MessageUi.LocalUserMessage(
                             id = Uuid.random().toString(),
                             content = "Hello world!",
