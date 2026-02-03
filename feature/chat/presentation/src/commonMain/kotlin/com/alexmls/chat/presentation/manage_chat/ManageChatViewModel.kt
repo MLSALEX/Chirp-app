@@ -8,7 +8,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import chirp.feature.chat.presentation.generated.resources.Res
 import chirp.feature.chat.presentation.generated.resources.error_participant_not_found
-import com.alexmls.chat.domain.chat.ChatParticipantService
+import com.alexmls.chat.domain.participant.ChatParticipantService
 import com.alexmls.chat.domain.chat.ChatRepository
 import com.alexmls.chat.presentation.components.manage_chat.ManageChatAction
 import com.alexmls.chat.presentation.components.manage_chat.ManageChatState
