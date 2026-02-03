@@ -41,6 +41,7 @@ import chirp.feature.chat.presentation.generated.resources.upload_icon
 import chirp.feature.chat.presentation.generated.resources.upload_image
 import com.alexmls.chat.presentation.profile.components.ProfileHeaderSection
 import com.alexmls.chat.presentation.profile.components.ProfileSectionLayout
+import com.alexmls.chat.presentation.profile.mediapicker.rememberImagePickerLauncher
 import com.alexmls.core.designsystem.components.avatar.AvatarSize
 import com.alexmls.core.designsystem.components.avatar.ChirpAvatarPhoto
 import com.alexmls.core.designsystem.components.brand.ChirpHorizontalDivider
@@ -64,6 +65,14 @@ fun ProfileRoot(
     viewModel: ProfileViewModel = koinViewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+
+    val launcher = rememberImagePickerLauncher { pickedImageData ->
+        viewModel.onAction(ProfileAction.OnPictureSelected(
+            pickedImageData.bytes,
+            pickedImageData.mimeType
+        ))
+    }
+
     ChirpAdaptiveDialogSheetLayout(
         onDismiss = onDismiss
     ) {
@@ -72,6 +81,9 @@ fun ProfileRoot(
             onAction = { action ->
                 when(action) {
                     is ProfileAction.OnDismiss -> onDismiss()
+                    is ProfileAction.OnUploadPictureClick -> {
+                        launcher.launch()
+                    }
                     else -> Unit
                 }
                 viewModel.onAction(action)
