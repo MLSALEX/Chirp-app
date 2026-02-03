@@ -7,6 +7,7 @@ import com.alexmls.chat.data.mappers.toDomain
 import com.alexmls.chat.domain.models.ChatParticipant
 import com.alexmls.chat.domain.models.ProfilePictureUploadUrls
 import com.alexmls.chat.domain.participant.ChatParticipantService
+import com.alexmls.core.data.networking.delete
 import com.alexmls.core.data.networking.get
 import com.alexmls.core.data.networking.post
 import com.alexmls.core.data.networking.safeCall
@@ -69,6 +70,12 @@ class KtorChatParticipantService(
         return httpClient.post<ConfirmProfilePictureRequest, Unit>(
             route = "/participants/confirm-profile-picture",
             body = ConfirmProfilePictureRequest(publicUrl)
+        )
+    }
+
+    override suspend fun deleteProfilePicture(): EmptyResult<DataError.Remote> {
+        return httpClient.delete(
+            route = "/participants/profile-picture"
         )
     }
 }
