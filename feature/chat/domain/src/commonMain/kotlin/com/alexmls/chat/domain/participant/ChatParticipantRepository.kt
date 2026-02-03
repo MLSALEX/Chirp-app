@@ -2,8 +2,13 @@ package com.alexmls.chat.domain.participant
 
 import com.alexmls.chat.domain.models.ChatParticipant
 import com.alexmls.core.domain.util.DataError
+import com.alexmls.core.domain.util.EmptyResult
 import com.alexmls.core.domain.util.Result
 
 interface ChatParticipantRepository {
     suspend fun fetchLocalParticipant(): Result<ChatParticipant, DataError>
+    suspend fun uploadProfilePicture(
+        imageBytes: ByteArray,
+        mimeType: String
+    ): EmptyResult<DataError.Remote>
 }
