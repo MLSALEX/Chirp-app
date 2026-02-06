@@ -42,6 +42,8 @@ import com.alexmls.core.designsystem.components.buttons.ChirpFloatingActionButto
 import com.alexmls.core.designsystem.components.dialogs.DestructiveConfirmationDialog
 import com.alexmls.core.designsystem.theme.ChirpTheme
 import com.alexmls.core.designsystem.theme.extended
+import com.alexmls.core.presentation.permissions.Permission
+import com.alexmls.core.presentation.permissions.rememberPermissionController
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
@@ -85,6 +87,10 @@ fun ChatListScreen(
     onAction: (ChatListAction) -> Unit,
     snackbarHostState: SnackbarHostState
 ) {
+    val permissionController = rememberPermissionController()
+    LaunchedEffect(true) {
+        permissionController.requestPermission(Permission.NOTIFICATIONS)
+    }
     Scaffold(
         modifier = Modifier
             .fillMaxSize(),
