@@ -1,5 +1,6 @@
 package com.alexmls.chirp
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.alexmls.chat.database.ChirpChatDatabase
+import com.alexmls.chirp.navigation.ExternalUriHandler
 import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
@@ -24,6 +26,8 @@ class MainActivity : ComponentActivity() {
             enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
+        handleChatMessageDeeplink(intent)
+
         //for testing db
         println(db.toString())
 
@@ -33,6 +37,21 @@ class MainActivity : ComponentActivity() {
                     shouldShowSplashScreen = false
                 }
             )
+        }
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleChatMessageDeeplink(intent)
+    }
+
+    private fun handleChatMessageDeeplink(intent: Intent) {
+        val chatId = intent.getStringExtra("chatId")
+            ?: intent.extras?.getString("chatId")
+
+        if(chatId != null) {
+            val deepLinkUrl = "chirp://chat_detail/$chatId"
+            ExternalUriHandler.onNewUri(deepLinkUrl)
         }
     }
 }
